@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Custom styles for enhanced text box appearance */
+        .custom-input {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.15s ease-in-out, shadow-sm 0.15s ease-in-out;
+            outline: none;
+            margin-bottom: 0.5rem;
+        }
+
+        .custom-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .custom-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            margin-right: 1rem;
+            display: block;
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+
+        .drag-handle {
+            cursor: move;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            margin-right: 0.75rem;
+            color: #d1d5db;
+            transition: color 0.15s ease-in-out;
+        }
+
+        .drag-handle:hover {
+            color: #9ca3af;
+        }
+
+        .reorderable-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .reorderable-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .remove-button {
+            margin-left: 1rem;
+            color: #ef4444;
+            cursor: pointer;
+            transition: color 0.15s ease-in-out;
+            border: none;
+            background-color: transparent;
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        .remove-button:hover {
+            color: #dc2626;
+        }
+
+        .add-field-button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #3b82f6;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease-in-out;
+            font-size: 1rem;
+            border: none;
+        }
+
+        .add-field-button:hover {
+            background-color: #2563eb;
+        }
+
+        .export-button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #3b82f6;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease-in-out;
+            font-size: 1rem;
+            border: none;
+        }
+
+        .export-button:hover {
+            background-color: #3b82f6;
+        }
+
+        #export-options {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            width: 3rem;
+            height: 3rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center no-print">
+            Password Manager Emergency Sheet
+        </h1>
+        <div id="form-container">
+            <div class="reorderable-item">
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">Password Manager</label>
+                <input type="text" class="custom-input" placeholder="Password manager name">
+                <button class="remove-button no-print">X</button>
+            </div>
+            <div class="reorderable-item">
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">PM Email Address</label>
+                <input type="text" class="custom-input" placeholder="Enter email">
+                <button class="remove-button no-print">X</button>
+            </div>
+            <div class="reorderable-item">
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">PM Master Password</label>
+                <input type="text" class="custom-input" placeholder="Enter master password">
+                <button class="remove-button no-print">X</button>
+            </div>
+            <div class="reorderable-item">
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">PM MFA Method</label>
+                <input type="text" class="custom-input" placeholder="Enter MFA method">
+                <button class="remove-button no-print">X</button>
+            </div>
+            <div class="reorderable-item">
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">PM Recovery Code(s)</label>
+                <input type="text" class="custom-input" placeholder="Enter PM recovery code(s)">
+                <button class="remove-button no-print">X</button>
+            </div>
+            <div class="reorderable-item">
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">Authenticator App</label>
+                <input type="text" class="custom-input" placeholder="Enter authenticator app name">
+                <button class="remove-button no-print">X</button>
+            </div>
+            <div class="reorderable-item">
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">Authenticator Email/Username</label>
+                <input type="text" class="custom-input" placeholder="Enter email/username">
+                <button class="remove-button no-print">X</button>
+            </div>
+            <div class="reorderable-item">
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">Authenticator Password</label>
+                <input type="text" class="custom-input" placeholder="Enter password">
+                <button class="remove-button no-print">X</button>
+            </div>
+            <div class="reorderable-item">
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">Authenticator Recovery Code(s)</label>
+                <input type="text" class="custom-input" placeholder="Enter recovery code(s)">
+                <button class="remove-button no-print">X</button>
+            </div>
+        </div>
+        <div class="flex justify-between items-center mt-4">
+            <button id="add-field-button" class="add-field-button no-print">Add new field</button>
+            <button id="print-button" class="export-button no-print">Print</button>
+        </div>
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script>
+        const formContainer = document.getElementById('form-container');
+        const addFieldButton = document.getElementById('add-field-button');
+        const exportOptions = document.getElementById('export-options');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const printButton = document.getElementById('print-button');
+
+
+        function showLoading() {
+            loadingOverlay.classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.add('hidden');
+        }
+
+        function addNewField() {
+            const newItem = document.createElement('div');
+            newItem.classList.add('reorderable-item');
+            newItem.innerHTML = `
+                <div class="drag-handle no-print">☰</div>
+                <label class="custom-label" contenteditable="true">New Field</label>
+                <input type="text" class="custom-input" placeholder="Enter value">
+                <button class="remove-button no-print">X</button>
+            `;
+            formContainer.appendChild(newItem);
+            initializeRemoveButtons();
+            initializeSortable();
+            exportOptions.classList.remove('hidden');
+        }
+
+        function removeField(event) {
+            event.target.parentNode.remove();
+            if (formContainer.children.length <= 3) {
+                exportOptions.classList.add('hidden');
+            }
+        }
+
+        function initializeRemoveButtons() {
+            const removeButtons = document.querySelectorAll('.remove-button');
+            removeButtons.forEach(button => {
+                button.addEventListener('click', removeField);
+            });
+        }
+
+        function collectFormData() {
+            const data = [];
+            const items = formContainer.querySelectorAll('.reorderable-item');
+            items.forEach(item => {
+                const label = item.querySelector('label').textContent;
+                const value = item.querySelector('input').value;
+                data.push({ label, value });
+            });
+            return data;
+        }
+
+
+        function printSheet() {
+            window.print();
+        }
+
+        // Initialize event listeners
+        addFieldButton.addEventListener('click', addNewField);
+        printButton.addEventListener('click', printSheet);
+        initializeRemoveButtons();
+
+        // Initialize SortableJS
+        function initializeSortable() {
+            Sortable.create(formContainer, {
+                animation: 150,
+                handle: ".drag-handle",
+                onEnd(evt) {
+                    const newIndex = evt.newIndex;
+                    const oldIndex = evt.oldIndex;
+                },
+            });
+        }
+        initializeSortable();
+    </script>
+</body>
+</html>
